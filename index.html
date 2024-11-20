@@ -1,0 +1,67 @@
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trash Rewards App</title>
+    <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+    <div class="container">
+        
+        <div id="login-section">
+            <h2>Login</h2>
+            <form id="login-form">
+                <label for="phone">Phone Number:</label>
+                <input type="text" id="phone" required>
+                <label for="pin">PIN:</label>
+                <input type="text" id="phone" required>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+
+        
+        <div id="dashboard" style="display: none;">
+            <h2>Welcome Back!</h2>
+            <p>Your Balance: <span id="balance">0</span> Points</p>
+            <p>Your Badge: <span id="badge">Newbie</span></p>
+            
+            
+            <h3>Dispose Trash</h3>
+            <form id="trash-form">
+                <label for="type">Trash Type:</label>
+                <select id="type" required>
+                    <option value="Glass">Glass</option>
+                    <option value="Plastic">plastic</option>
+                    <option value="E-waste">E-waste</option>
+                    <option value="iron">Iron</option>
+                    <option value="Organic">Organic</option>
+                </select>
+                <label for="weight">Weight (kg):</label>
+                <input type="number" id="weight" step="0.1" min="0.1" required> <br><br>
+                <button type="submit">Dispose</button>
+            </form>
+            <br><br>
+            
+            
+            
+            <div>
+                
+                <input type="text" id="account">
+                <label for="amount">Amount:</label>
+                <input type="number" id="amount" step="0.1" required> 
+                <button type="submit">claim reward</button> -->
+                <button type="button" onclick="window.location.href='withdraw.html';">Withdraw</button>
+            </div> <br>
+
+            
+             <div>
+                <button type="button" onclick="window.location.href='activities.html';">Activities</button>
+             </div> <br>
+            
+            <button id="logout">Logout</button>
+        </div>
+    </div>
+    <script src="assets/script.js"></script>
+</body>
+</html>

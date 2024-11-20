@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> claim reward Reward</title>
+    <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Withdraw Points</h2>
+        <p>Your Balance: <span id="balance">0</span> Points</p>
+        <p>Your Badge: <span id="badge">Newbie</span></p>
+        <button style="margin: 5px;" onclick="window.location.href='dashboard.html';">Back to Dashboard</button> <br>
+        <button style="margin: 5px;" type="button" onclick="window.location.href='activities.html';">Activities</button>
+        
+        <form id="claim reward-form">
+            <label for="account">Account Number (Optional):</label>
+            <input type="text" id="account">
+            <label for="amount">Amount:</label>
+            <input type="number" id="amount" step="0.1" required> <br><br>
+            <button type="submit">claim reward</button>
+        </form>
+    </div>
+    <script>
+        
+        const userData = JSON.parse(localStorage.getItem("userData")) || { balance: 0, badge: "Newbie" };
+
+        
+        document.getElementById("balance").innerText = `${userData.balance} Points (${(userData.balance * 0.5).toFixed(2)} Naira)`;
+        document.getElementById("badge").innerText = userData.badge;
+
+        
+        document.getElementById("claim reward-form").addEventListener("submit", (e) => {
+            e.preventDefault();
+            const amount = parseFloat(document.getElementById("amount").value);
+            const account = document.getElementById("account").value || "Default Account";
+
+            if (amount > 0 && amount <= userData.balance * 0.5) {
+                const pointsToDeduct = amount / 0.5; // Conversion rate
+                userData.balance -= pointsToDeduct;
+
+                
+                const activity = `claim reward ${amount} Naira to ${account}.`;
+                userData.activities.push(activity);
+                localStorage.setItem("userData", JSON.stringify(userData));
+
+                alert(`claim reward successful! ${amount} Naira sent to ${account}.`);
+
+                
+                document.getElementById("balance").innerText = `${userData.balance} Points (${(userData.balance * 0.5).toFixed(2)} Naira)`;
+                document.getElementById("claim reward-form").reset();
+            } else {
+                alert("Invalid withdrawal amount.");
+            }
+        });
+    </script>
+</body>
+</html>

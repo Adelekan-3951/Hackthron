@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activities</title>
+    <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+    
+    <div class="container">
+        <h2>Your Activities</h2>
+        <p>Your Balance: <span id="balance">0</span> Points</p>
+        <p>Your Badge: <span id="badge">Newbie</span></p>
+        <button type="button" onclick="window.location.href='withdraw.html';">Withdraw</button>
+        <ul id="activities"></ul>
+        <button onclick="window.location.href='dashboard.html';">Back to Dashboard</button>
+    </div>
+    <script>
+        
+        const userData = JSON.parse(localStorage.getItem("userData"));
+
+        if (userData) {
+            
+            document.getElementById("balance").innerText = `${userData.balance} Points`;
+            document.getElementById("badge").innerText = userData.badge;
+
+            
+            const activitiesList = document.getElementById("activities");
+            if (userData.activities && userData.activities.length > 0) {
+                activitiesList.innerHTML = userData.activities
+                    .map(activity => `<li>${activity}</li>`)
+                    .join("");
+            } else {
+                activitiesList.innerHTML = "<li>No activities yet.</li>";
+            }
+        } else {
+            alert("No user data found. Please log in first.");
+            window.location.href = "index.html"; // Redirect to the login page
+        }
+    </script>
+</body>
+</html>

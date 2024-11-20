@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trash Rewards App - Dashboard</title>
+    <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+    <div class="container">
+        <div id="dashboard">
+            <h2>Welcome Back!</h2>
+            <p>Your Balance: <span id="balance">0</span> Points</p>
+            <p>Your Badge: <span id="badge">Newbie</span> <span id="badge-stars">⭐</span></p>
+
+            <h3>Dispose Trash</h3>
+            <form id="trash-form">
+                <label for="type">Trash Type:</label>
+                <select id="type" required>
+                    <option value="paper">Paper</option>
+                    <option value="plastic">Plastic</option>
+                    <option value="iron">Iron</option>
+                    <option value="e-waste">E-Waste</option>
+                    <option value="organic">Organic</option>
+                </select>
+                <label for="weight">Weight (kg):</label>
+                <input type="number" id="weight" step="0.1" min="0.1" required>
+                <br><br>
+                <button type="submit">Dispose</button>
+            </form>
+            <br><br>
+
+        
+            <h3>Upload User Image</h3>
+            <form id="user-image-form" enctype="multipart/form-data">
+                <label for="user-image">Choose an Image (Max 2KB):</label>
+                <input type="file" id="user-image" accept="image/*" required>
+                <br><br>
+                <button type="submit">Upload Image</button>
+            </form>
+            <img id="user-image-preview" src="" alt="User Image Preview" style="display:none; margin-top:10px; max-width:100px;">
+            <br><br>
+
+            
+            <h3>Upload Trash Image</h3>
+            <form id="trash-image-form" enctype="multipart/form-data">
+                <label for="trash-image">Choose an Image (Max 1KB):</label>
+                <input type="file" id="trash-image" accept="image/*" required>
+                <br><br>
+                <button type="submit">Upload Trash Image</button>
+            </form>
+            <img id="trash-image-preview" src="" alt="Trash Image Preview" style="display:none; margin-top:10px; max-width:100px;">
+            <br><br>
+
+            <h3>User Information</h3>
+            <form id="user-info-form">
+                <label for="user-name">Name:</label>
+                <input type="text" id="input-name" required>
+                <br>
+                <label for="user-address">Address:</label>
+                <input type="text" id="input-address" required>
+                <br>
+                <label for="user-email">Email:</label>
+                <input type="email" id="input-email" required>
+                <br>
+                <label for="user-phone">Phone Number:</label>
+                <input type="text" id="input-phone" required>
+                <br>
+                <label for="user-area-code">Area Code:</label>
+                <input type="text" id="input-area-code" required>
+                <br><br>
+                <button type="submit">Save Details</button>
+            </form>
+            <br>
+
+            <p><strong>Name:</strong> <span id="user-name">John Doe</span></p>
+            <p><strong>Address:</strong> <span id="user-address">1234 Street Name</span></p>
+            <p><strong>Email:</strong> <span id="user-email">johndoe@example.com</span></p>
+            <p><strong>Phone Number:</strong> <span id="user-phone">+1234567890</span></p>
+            <p><strong>Area Code:</strong> <span id="user-area-code">12345</span></p>
+
+            <br><br>
+
+            <button onclick="window.location.href='withdraw.html';">Withdraw</button> <br><br>
+            <button onclick="window.location.href='activities.html';">Activities</button><br><br>
+            <button id="logout">Logout</button>
+        </div>
+    </div>
+
+    <script>
+        function getBadgeStars(points) {
+            if (points >= 100) {
+                return "⭐⭐⭐⭐⭐";
+            } else if (points >= 75) {
+                return "⭐⭐⭐⭐";
+            } else if (points >= 50) {
+                return "⭐⭐⭐";
+            } else if (points >= 25) {
+                return "⭐⭐";
+            } else {
+                return "⭐";
+            }
+        }
+
+        function validateFileSize(input, maxSize, previewId) {
+            const file = input.files[0];
+            if (file.size > maxSize) {
+                alert(`File size exceeds the maximum limit of ${(maxSize / 1024).toFixed(1)}KB.`);
+                input.value = ""; 
+                return false;
+            }
+            const reader = new FileReader();
+            reader.onload = () => {
+                document.getElementById(previewId).src = reader.result;
+                document.getElementById(previewId).style.display = "block";
+            };
+            reader.readAsDataURL(file);
+            return true;
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const userData = JSON.parse(localStorage.getItem("userData")) || { 
+                balance: 0, 
+                badge: "Newbie", 
+                activities: [], 
+                name: "John Doe", 
+                address: "1234 Street Name", 
+                email: "johndoe@example.com", 
+                phone: "+1234567890", 
+                areaCode: "12345" 
+            };
+
+            // Update balance and badge
+            document.getElementById("balance").innerText = `${userData.balance} Points (${(userData.balance * 0.5).toFixed(2)} Naira)`;
+            document.getElementById("badge").innerText = userData.badge;
+            document.getElementById("badge-stars").innerText = getBadgeStars(userData.balance);
+
+            
+            document.getElementById("user-name").innerText = userData.name;
+            document.getElementById("user-address").innerText = userData.address;
+            document.getElementById("user-email").innerText = userData.email;
+            document.getElementById("user-phone").innerText = userData.phone;
+            document.getElementById("user-area-code").innerText = userData.areaCode;
+
+            
+            document.getElementById("user-info-form").addEventListener("submit", (event) => {
+                event.preventDefault();
+
+                const name = document.getElementById("input-name").value;
+                const address = document.getElementById("input-address").value;
+                const email = document.getElementById("input-email").value;
+                const phone = document.getElementById("input-phone").value;
+                const areaCode = document.getElementById("input-area-code").value;
+
+                userData.name = name;
+                userData.address = address;
+                userData.email = email;
+                userData.phone = phone;
+                userData.areaCode = areaCode;
+
+                localStorage.setItem("userData", JSON.stringify(userData));
+
+                document.getElementById("user-name").innerText = name;
+                document.getElementById("user-address").innerText = address;
+                document.getElementById("user-email").innerText = email;
+                document.getElementById("user-phone").innerText = phone;
+                document.getElementById("user-area-code").innerText = areaCode;
+
+                alert("User information saved successfully!");
+            });
+
+            
+            document.getElementById("logout").addEventListener("click", () => {
+                localStorage.removeItem("userData");
+                window.location.href = "index.html";
+            });
+
+            
+            document.getElementById("trash-form").addEventListener("submit", (event) => {
+                event.preventDefault();
+
+                const type = document.getElementById("type").value;
+                const weight = parseFloat(document.getElementById("weight").value);
+                const pointsPerKg = { "paper": 2, "plastic": 3, "iron": 4, "e-waste": 5, "organic": 1 };
+                const pointsEarned = pointsPerKg[type] * weight;
+
+                userData.balance += pointsEarned;
+                localStorage.setItem("userData", JSON.stringify(userData));
+
+                document.getElementById("balance").innerText = `${userData.balance} Points (${(userData.balance * 0.5).toFixed(2)} Naira)`;
+                document.getElementById("badge-stars").innerText = getBadgeStars(userData.balance);
+
+                alert(`You disposed of ${weight}kg of ${type} and earned ${pointsEarned} points!`);
+            });
+
+            
+            document.getElementById("user-image-form").addEventListener("submit", (event) => {
+                event.preventDefault();
+                const userImageInput = document.getElementById("user-image");
+                if (validateFileSize(userImageInput, 2048, "user-image-preview")) {
+                    alert("User image uploaded successfully!");
+                }
+            });
+
+        
+            document.getElementById("trash-image-form").addEventListener("submit", (event) => {
+                event.preventDefault();
+                const trashImageInput = document.getElementById("trash-image");
+                if (validateFileSize(trashImageInput, 1024, "trash-image-preview")) {
+                    alert("Trash image uploaded successfully!");
+                }
+            });
+        });
+    </script>
+</body>
+</html>
