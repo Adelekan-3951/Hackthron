@@ -1,1 +1,1 @@
-Hacthron Project
+Hackthron Project
